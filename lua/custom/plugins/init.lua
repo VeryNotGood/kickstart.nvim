@@ -7,11 +7,12 @@ vim.keymap.set('n', '<C-u>', '<C-u>zz', { desc = 'Page Up Centered' })
 vim.keymap.set('n', 'H', 'Hzz', { desc = 'Middle Page Centered' })
 vim.keymap.set('n', 'G', 'Gzz', { desc = 'EOF Centered' })
 vim.keymap.set('n', 'J', 'mzJ`z', { desc = 'Join Lines' })
-vim.keymap.set('n', '<leader>b', '<cmd> enew <CR>', { desc = 'New Buffer' })
+-- vim.keymap.set('n', '<leader>b', '<cmd> enew <CR>', { desc = 'New Buffer' }) --Don't really find myself using this
 vim.keymap.set('n', '<leader><tab> ', '<cmd> bn <CR>', { desc = 'Next Buffer' })
 vim.keymap.set('n', '<leader>,', '<cmd> bp <CR>', { desc = 'Prev Buffer' })
 vim.keymap.set('n', '<leader>g%', '<cmd> Git commit % <CR>', { desc = 'Commit this file' })
 vim.keymap.set('n', '<leader>g.', '<cmd> Git commit .<CR>', { desc = 'Commit all files' })
+vim.keymap.set('n', '<leader>gp', '<cmd> Git push <CR>', { desc = 'Git push' })
 -- Visual Mode Remaps:
 -- These are now handled by mini.move:
 -- vim.keymap.set('v', '<leader>j', " :m '>+ 1 <CR>gv=gv", { desc = 'Move Up Through Lines' })
@@ -22,6 +23,24 @@ vim.keymap.set({ 'n', 'x', 'o' }, 'gs', '<Plug>(leap-from-window)')
 
 -- Plugins:
 return {
+  -- {
+  --   'declancm/cinnamon.nvim',
+  --   version = '*', -- use latest release
+  --   opts = {
+  --     -- change default options here
+  --   },
+  --   config = function()
+  --     require('cinnamon').setup {
+  --       -- Enable all provided keymaps
+  --       keymaps = {
+  --         basic = true,
+  --         extra = true,
+  --       },
+  --       -- Only scroll the window
+  --       options = { mode = 'window' },
+  --     }
+  --   end,
+  -- },
   {
     'ggandor/leap.nvim',
   },
