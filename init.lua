@@ -897,6 +897,8 @@ require('lazy').setup({
       require('mini.icons').setup()
       require('mini.tabline').setup()
       require('mini.git').setup()
+      vim.keymap.set({ 'n', 'x' }, '<Leader>gs', '<Cmd>lua MiniGit.show_at_cursor()<CR>', { desc = 'Show at cursor' })
+      require('mini.diff').setup()
     end,
   },
   { -- Highlight, edit, and navigate code
