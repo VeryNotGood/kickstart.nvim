@@ -1,3 +1,6 @@
+-- Get rid of ridiculous indentation defaults
+vim.opt.shiftwidth = 4
+vim.opt.tabstop = 4
 -- Set <space> as the leader key
 -- See `:help mapleader`
 --  NOTE: Must happen before plugins are loaded (otherwise wrong leader will be used)
@@ -69,7 +72,7 @@ vim.opt.inccommand = 'split'
 vim.opt.cursorline = true
 
 -- Minimal number of screen lines to keep above and below the cursor.
-vim.opt.scrolloff = 10
+vim.opt.scrolloff = 5
 
 -- [[ Basic Keymaps ]]
 --  See `:help vim.keymap.set()`
@@ -545,7 +548,7 @@ require('lazy').setup({
 
         lua_ls = {
           -- cmd = {...},
-          -- filetypes = { ...},
+          filetypes = { '*.lua' },
           -- capabilities = {},
           settings = {
             Lua = {
@@ -668,13 +671,26 @@ require('lazy').setup({
       --  into multiple repos for maintenance purposes.
       'hrsh7th/cmp-nvim-lsp',
       'hrsh7th/cmp-path',
+      'hrsh7th/cmp-buffer',
+      'hrsh7th/cmp-cmdline',
     },
     config = function()
       -- See `:help cmp`
       local cmp = require 'cmp'
       local luasnip = require 'luasnip'
       luasnip.config.setup {}
-
+      cmp.setup.cmdline(':', {
+        mapping = cmp.mapping.preset.cmdline(),
+        sources = cmp.config.sources({
+          { name = 'nvim_lsp' },
+          { name = 'path' },
+        }, {
+          {
+            name = 'cmdline',
+          },
+          { name = 'buffer' },
+        }),
+      })
       cmp.setup {
         snippet = {
           expand = function(args)
