@@ -47,6 +47,52 @@ return {
     end,
   },
   {
+    'folke/trouble.nvim',
+    opts = {}, -- for default options, refer to the configuration section for custom setup.
+    cmd = 'Trouble',
+    keys = {
+      {
+        '<leader>xx',
+        '<cmd>Trouble diagnostics toggle<cr>',
+        desc = 'Diagnostics (Trouble)',
+      },
+      {
+        '<leader>xX',
+        '<cmd>Trouble diagnostics toggle filter.buf=0<cr>',
+        desc = 'Buffer Diagnostics (Trouble)',
+      },
+      {
+        '<leader>cs',
+        '<cmd>Trouble symbols toggle focus=false<cr>',
+        desc = 'Symbols (Trouble)',
+      },
+      {
+        '<leader>cl',
+        '<cmd>Trouble lsp toggle focus=false win.position=right<cr>',
+        desc = 'LSP Definitions / references / ... (Trouble)',
+      },
+      {
+        '<leader>xL',
+        '<cmd>Trouble loclist toggle<cr>',
+        desc = 'Location List (Trouble)',
+      },
+      {
+        '<leader>xQ',
+        '<cmd>Trouble qflist toggle<cr>',
+        desc = 'Quickfix List (Trouble)',
+      },
+    },
+  },
+  {
+    'ibhagwan/fzf-lua',
+    -- optional for icon support
+    dependencies = { 'nvim-tree/nvim-web-devicons' },
+    config = function()
+      -- calling `setup` is optional for customization
+      require('fzf-lua').setup {}
+    end,
+  },
+  {
     'folke/flash.nvim',
     event = 'VeryLazy',
     ---@diagnostic disable-next-line
@@ -86,9 +132,7 @@ return {
       'nvim-lua/plenary.nvim',
     },
     config = function()
-      config = function()
-        require('harpoon').setup()
-      end
+      require('harpoon'):setup()
 
       local conf = require('telescope.config').values
       local function toggle_telescope(harpoon_files)
@@ -136,10 +180,10 @@ return {
       end, { desc = 'Harpoon File [ 5 ]' })
 
       vim.keymap.set('n', '<leader>p', function()
-        harpoon:list():prev()
+        require('harpoon'):list():prev()
       end, { desc = 'Harpoon [P]revious Buffer' })
       vim.keymap.set('n', '<leader>n', function()
-        harpoon:list():next()
+        require('harpoon'):list():next()
       end, { desc = 'Harpoon [N]ext Buffer' })
     end,
   },
