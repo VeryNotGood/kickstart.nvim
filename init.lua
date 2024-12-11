@@ -157,7 +157,7 @@ require('lazy').setup({
 
   -- Here is a more advanced example where we pass configuration
   -- options to `gitsigns.nvim`. This is equivalent to the following Lua:
-  --    require('gitsigns').setup({ ... })
+  -- require('gitsigns').setup { ... }
   --
   -- See `:help gitsigns` to understand what the configuration keys do
   { -- Adds git related signs to the gutter, as well as utilities for managing changes
@@ -306,12 +306,31 @@ require('lazy').setup({
         },
         -- pickers = {}
         extensions = {
+          fzf = {},
           ['ui-select'] = {
             require('telescope.themes').get_dropdown(),
           },
         },
       }
 
+      require('telescope').load_extension 'fzf'
+      --
+      vim.keymap.set('n', '<leader>fh', require('telescope.builtin').help_tags)
+      vim.keymap.set('n', '<leader>fd', require('telescope.builtin').find_files)
+      vim.keymap.set('n', '<leader>en', function()
+        require('telescope.builtin').find_files {
+          cwd = vim.fn.stdpath 'config',
+        }
+      end)
+
+      vim.keymap.set('n', '<leader>ep', function()
+        require('telescope.builtin').find_files {
+          cwd = vim.fs.joinpath(vim.fn.stdpath 'data', 'lazy'),
+        }
+      end)
+
+      require('telescope.multigrep').setup()
+      -- }
       -- Enable Telescope extensions if they are installed
       pcall(require('telescope').load_extension, 'fzf')
       pcall(require('telescope').load_extension, 'ui-select')
@@ -547,8 +566,8 @@ require('lazy').setup({
         --
 
         lua_ls = {
-          -- cmd = {...},
-          filetypes = { '*.lua' },
+          -- cmd = {},
+          -- filetypes = { '*.lua' },
           -- capabilities = {},
           settings = {
             Lua = {
@@ -627,6 +646,7 @@ require('lazy').setup({
       end,
       formatters_by_ft = {
         lua = { 'stylua' },
+        go = { 'gopls' },
         -- Conform can also run multiple formatters sequentially
         -- python = { "isort", "black" },
         --
@@ -802,7 +822,7 @@ require('lazy').setup({
       -- - saiw) - [S]urround [A]dd [I]nner [W]ord [)]Paren
       -- - sd'   - [S]urround [D]elete [']quotes
       -- - sr)'  - [S]urround [R]eplace [)] [']
-      require('mini.surround').setup()
+      require('mini.surround').setup {}
 
       -- Simple and easy statusline.
       --  You could remove this setup call if you don't like it,
