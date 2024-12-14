@@ -1,5 +1,6 @@
 -- Insert Mode Remaps:
-vim.keymap.set({ 'i', 'c', 'v' }, 'jk', '<Esc>', { desc = 'Exit insert/cmd-line/visual mode' })
+vim.keymap.set({ 'i', 'c' }, 'jk', '<Esc>', { desc = 'Exit insert/cmd-line' })
+vim.keymap.set({ 'v' }, 'JK', '<Esc>', { desc = 'Exit visual mode' })
 vim.keymap.set('i', '<C-b>', '<ESC>^i', { desc = 'Beginning of line' })
 vim.keymap.set('i', '<C-e>', '<ESC>$a', { desc = 'End of line' })
 -- Normal Mode Remaps:
@@ -11,30 +12,52 @@ vim.keymap.set('n', 'J', 'mzJ`z', { desc = 'Join Lines' })
 -- vim.keymap.set('n', '<leader>b', '<cmd> enew <CR>', { desc = 'New Buffer' }) --Don't really find myself using this
 vim.keymap.set('n', '<leader><tab>', '<cmd> bn <CR>', { desc = '[N]ext Buffer' })
 vim.keymap.set('n', '<leader><S-tab>', '<cmd> bp <CR>', { desc = '[P]rev Buffer' })
-vim.keymap.set('n', '<leader>x', '<cmd> bn <CR> <cmd> bd# <CR>', { desc = 'Delete/E[x]it Buffer' })
+vim.keymap.set('n', '<leader>df', '<cmd> bd <CR> <cmd> bn <CR>', { desc = '[D]elete/Exit Buffer' })
 vim.keymap.set('n', '<leader>gt', '<cmd> Git commit % <CR>', { desc = 'Commit [T]his file' })
 vim.keymap.set('n', '<leader>ga', '<cmd> Git commit .<CR>', { desc = 'Commit [A]ll files' })
 vim.keymap.set('n', '<leader>gp', '<cmd> Git push <CR>', { desc = 'Git [P]ush' })
 vim.keymap.set('n', '<leader>gi', '<cmd> GoImport <CR>', { desc = '[G]o [I]mport' })
 vim.keymap.set('n', '""', '<cmd> Telescope neoclip <CR>', { desc = 'Telescope Registers' })
 -- Visual Mode Remaps:
-vim.keymap.set({ 'n', 'x', 'o' }, '<leader>l', '<Plug>(leap-forward)', { desc = 'Leap Forward' })
-vim.keymap.set({ 'n', 'x', 'o' }, '<leader>L', '<Plug>(leap-backward)', { desc = 'Leap Backward' })
+vim.keymap.set({ 'n', 'x', 'o', 'v' }, '<leader>l', '<Plug>(leap-forward)', { desc = 'Leap Forward' })
+vim.keymap.set({ 'n', 'x', 'o', 'v' }, '<leader>L', '<Plug>(leap-backward)', { desc = 'Leap Backward' })
 vim.keymap.set({ 'n', 'x', 'o' }, '<leader>lw', '<Plug>(leap-from-window)', { desc = 'Leap from Window' })
 
--- require('lspconfig').gopls.setup {}
---
--- local format_sync_grp = vim.api.nvim_create_augroup('goimports', {})
--- vim.api.nvim_create_autocmd('BufWritePre', {
---   pattern = '*.go',
---   callback = function()
---     require('go.format').goimports()
---   end,
--- group = format_sync_grp,
--- })
---
+require('lspconfig').gopls.setup {}
+
+local format_sync_grp = vim.api.nvim_create_augroup('goimports', {})
+vim.api.nvim_create_autocmd('BufWritePre', {
+  pattern = '*.go',
+  callback = function()
+    require('go.format').goimports()
+  end,
+  group = format_sync_grp,
+})
+
 -- Plugins:
 return {
+  {
+    'sphamba/smear-cursor.nvim',
+
+    opts = {
+      -- Smear cursor color. Defaults to Cursor GUI color if not set.
+      -- Set to "none" to match the text color at the target cursor position.
+      cursor_color = '#d3cdc3',
+
+      -- Background color. Defaults to Normal GUI background color if not set.
+      normal_bg = '#282828',
+
+      -- Smear cursor when switching buffers or windows.
+      smear_between_buffers = true,
+
+      -- Smear cursor when moving within line or to neighbor lines.
+      smear_between_neighbor_lines = true,
+
+      -- Set to `true` if your font supports legacy computing symbols (block unicode symbols).
+      -- Smears will blend better on all backgrounds.
+      legacy_computing_symbols_support = false,
+    },
+  },
   {
     'AckslD/nvim-neoclip.lua',
     dependencies = {
@@ -119,6 +142,11 @@ return {
     },
     config = function()
       require('go').setup()
+      require('mason').setup()
+      require('mason-lspconfig').setup()
+      require('lspconfig').gopls.setup {
+        -- your gopls setup
+      }
     end,
     event = { 'CmdlineEnter' },
     ft = { 'go', 'gomod' },
